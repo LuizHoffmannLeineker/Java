@@ -4,138 +4,90 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<ContaBancaria> dados = new ArrayList<ContaBancaria>();
+        List <Agenda> dados = new ArrayList<Agenda>();
         Scanner leitor = new Scanner(System.in);
         String nome;
-        int numero_conta;
-        float saldo = 0.0f, valor;
+        String telefone;
         int opcao, registro = 0, aux = 0;
-        boolean status;
+        boolean retorno;
 
         do{
-            System.out.printf(" \n-------------------------------- \n");
-            System.out.printf("[1] - Cadastrar um novo cliente \n");
-            System.out.printf("-------------------------------- \n");
-            System.out.printf("[2] - Deposito  \n");
-            System.out.printf("[3] - Saque  \n");
-            System.out.printf("[4] - Cosultar saldo \n");
-            System.out.printf("--------------------------------\n");
-            System.out.printf("[5] - Sair \n");
-            System.out.printf("--------------------------------\n");
-            System.out.printf("Insira o numero de acordo com as opções: ");
+            System.out.printf("\n0~~~0~~~0~~~0~~~0~~~0~~~0~~~0~~~0\n");
+            System.out.printf("[1] - Adicionar Contato\n");
+            System.out.printf("[2] - Remover Contato\n");
+            System.out.printf("[3] - Buscar contato \n");
+            System.out.printf("[4] - Sair\n");
+            System.out.printf("0~~~0~~~0~~~0~~~0~~~0~~~0~~~0~~~0\n");
+            System.out.printf("Insira um numero de acordo com as opções: ");
             opcao = Integer.parseInt(leitor.nextLine());
 
-            switch (opcao) {
+            switch(opcao){
+
                 case 1:
-                    System.out.printf("Informe o numero da conta bancaria: ");
-                    numero_conta = Integer.parseInt(leitor.nextLine());
-                    for (int i = 0; i < registro; i++){
-                        status =  dados.get(i).verificar(numero_conta); 
-                         if(status == true){
-                             aux = 1;
-                             break;
-                         }
-                     }
-                    
-                     if(aux == 1){
-                        System.out.printf("ERRO... Já existe uma conta com esse numero bancario! \n");
-                     }
-                     else{
-                        System.out.printf("Informe o nome do cliente: ");
-                        nome = leitor.nextLine();
-                        dados.add(new ContaBancaria(nome, numero_conta, 0));   
-                        registro++;
-                     }
-                     aux = 0;
+                    System.out.printf("Insira o nome: ");
+                    nome = leitor.nextLine();
+
+                    System.out.printf("Informe o telefone: ");
+                    telefone = leitor.nextLine();
+
+                    dados.add(new Agenda(nome, telefone));
+
+                    registro++;
                 break;
 
                 case 2:
-                    System.out.printf("Informe o numero da sua conta bancaria: ");
-                    numero_conta = Integer.parseInt(leitor.nextLine());
+                    System.out.printf("\nInsira o nome do registro que deseja excluir:  ");
+                    nome = leitor.nextLine();
 
-                    System.out.printf("Informe o valor do deposito: ");
-                    valor = Float.parseFloat(leitor.nextLine());
+                    for(int i = 0; i <  registro; i++){
+                       retorno =  dados.get(i).verificar(nome);
+                       if(retorno){
+                           dados.remove(i);
+                           System.out.printf("O contanto foi removido da lista! \n");
+                           aux = 1;
+                           registro--;
+                           break;
+                       }
+                    }
 
-                    for (int i = 0; i < registro; i++){
-                       status =  dados.get(i).verificar(numero_conta); 
-                        if(status == true){
-                            saldo = dados.get(i).Depositar(valor);
-                            aux = 1;
-                            break;
-                        }
-                    }
-                    if (aux != 1){
-                        System.out.printf("O numero inserido não corresponde a nenhuma conta! ");
-                    }
-                    else{
-                        System.out.printf("Muito bem! O deposito foi realizado com sucesso.\nSaldo: %.2f", saldo);
+                    if(aux != 1){
+                        System.out.printf("Infelizmente esse nome não está em nossa agenda de contatos!\n");
                     }
                     aux = 0;
+
                 break;
 
                 case 3:
-                    System.out.printf("Informe o numero da sua conta bancaria: ");
-                    numero_conta = Integer.parseInt(leitor.nextLine());
-
-                    System.out.printf("Informe o valor do saque: ");
-                    valor = Float.parseFloat(leitor.nextLine());
-
-                    for (int i = 0; i < registro; i++){
-                        status =  dados.get(i).verificar(numero_conta); 
-                        saldo = dados.get(i).Sacar(0); //controlar para a pessoa não tirar um valor que não tem!
-                        if(status == true && saldo > valor){
-                            saldo = dados.get(i).Sacar(valor);
+                    System.out.printf("\nInsira o nome do contato: ");
+                    nome = leitor.nextLine();
+                    for (int i = 0; i <  registro; i++){
+                        retorno =  dados.get(i).verificar(nome);
+                        if(retorno){
+                            System.out.printf("O numero do Sr(a) seria: ");
+                            dados.get(i).listar();
                             aux = 1;
-                            break;
                         }
                     }
-                    if (aux != 1){
-                        System.out.printf("O numero inserido não corresponde a nenhuma conta ou o valor informado do saque é maior que seu saldo!  \nSaldo atual: %.2f", saldo);
+                    if(aux != 1){
+                        System.out.printf("Nome invalido! \n");
                     }
-                    else{
-                        System.out.printf("Muito bem! O Saque foi realizado com sucesso.\nSaldo: %.2f", saldo);
-                    }
-                    aux = 0;
+
                 break;
 
-                case 4:
-                    System.out.printf("Informe o numero da sua conta bancaria: ");
-                    numero_conta = Integer.parseInt(leitor.nextLine());
-
-                    for (int i = 0; i < registro; i++){
-                        status =  dados.get(i).verificar(numero_conta); 
-                         if(status == true){
-                             saldo = dados.get(i).getSaldo();
-                             System.out.printf("\n##############################\n");
-                             System.out.printf("Conta: %d\n", numero_conta);
-                             System.out.printf("Seu saldo atual: %.2f\n", saldo);
-                             System.out.printf("##############################\n");
-                             aux = 1;
-                             break;
-                         }
-                     }
-                     if (aux != 1){
-                        System.out.printf("O numero inserido não corresponde a nenhuma conta!!");
-                     }
-
-                break;
-            
                 default:
                 break;
+
+
+
             }
 
 
 
 
 
+        }while(opcao != 4);
 
-
-
-
-
-        }while(opcao != 5);
 
         leitor.close();
     }
-    
 }

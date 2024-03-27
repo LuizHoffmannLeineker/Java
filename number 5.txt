@@ -1,0 +1,1 @@
+na função freiar e acelerar eu escolho quantos o carro perdeu de velocidade e não o usuario
